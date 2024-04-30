@@ -1,0 +1,171 @@
+We have 4 sets of csv file.
+
+1) test.csv --> test_label.csv
+
+2) smap_test.csv --> smap_test_labels.csv
+
+3) msl_test.csv --> msl_test_labels.csv
+
+4) psm_test.csv --> psm_test_labels.csv
+
+test.csv files have multivariate time series data and test_labels.csv labels files have time stamps of anomaly regions. Write python code for the following tasks
+
+a) Read test and label files
+
+b) Draw time series plots with anomaly regions
+
+c) Perform EDA and find out root cause
+
+d) Find out the variables which are the root cause for the anomaly
+
+a) Read test and label
+Importing libraries
+
+[2]
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+Define function to read test and label files
+
+[3]
+
+# Define file paths for each set
+file_paths = {
+    "set1": ("test.csv", "test_label.csv"),
+    "set2": ("smap_test.csv", "smap_test_label.csv"),
+    "set3": ("msl_test.csv", "msl_test_label.csv"),
+    "set4": ("psm_test.csv", "psm_test_label.csv")
+}
+
+# Read test and label files
+def read_files(file_paths):
+    data = {}
+    for set_name, (test_file, label_file) in file_paths.items():
+        test_data = pd.read_csv(test_file)
+        label_data = pd.read_csv(label_file)
+        data[set_name] = {"test_data": test_data, "label_data": label_data}
+    return data
+
+# Example usage
+data = read_files(file_paths)
+b) Draw time series plots with anomaly regions
+[4]
+18s
+def draw_time_series_with_anomalies(test_data, label_data):
+    try:
+        plt.figure(figsize=(12, 6))
+        plt.plot(test_data.index, test_data.values, label='Time Series Data')
+        plt.xlabel('Time')
+        plt.ylabel('Value')
+        plt.title('Time Series Plot with Anomaly Regions')
+        for index, row in label_data.iterrows():
+            plt.axvspan(row['start_time'], row['end_time'], color='red', alpha=0.3, label='Anomaly Region')
+        plt.legend()
+        plt.show()
+    except KeyError as e:
+        print(f"Error: {e}. Make sure the label_data DataFrame contains columns 'start_time' and 'end_time'.")
+
+# Example usage
+for set_name, data_dict in data.items():
+    test_data = data_dict["test_data"]
+    label_data = data_dict["label_data"]
+    draw_time_series_with_anomalies(test_data, label_data)
+
+c) Perform EDA and find out root cause
+[19]
+13s
+def perform_eda(test_data):
+    # Perform exploratory data analysis here
+    # You can use methods like describe(), info(), plot(), etc.
+    # Analyze the data to find the root cause of anomalies
+
+    # Example:
+    print(test_data.describe())
+    print(test_data.info())
+    test_data.plot()
+    plt.show()
+
+  # Main function
+if __name__ == "__main__":
+
+
+    # Perform EDA and find root cause
+    perform_eda(test_data)
+
+
+d) Find out the variables which are the root cause for the anomaly
+[20]
+0s
+def find_root_cause(test_data, label_data):
+    try:
+        # Analyze the data to find the variables which are root cause for anomaly
+        # You can use statistical tests, visualization, or machine learning models
+
+        # Example:
+        correlation_matrix = test_data.corr()
+        root_cause_variables = correlation_matrix['value'][abs(correlation_matrix['value']) > 0.5].index.tolist()
+        print("Variables which are root cause for anomaly:", root_cause_variables)
+    except KeyError as e:
+        print("Error:", e)
+
+# Main function
+if __name__ == "__main__":
+    # Assuming test_data and label_data are defined elsewhere
+
+    # Find out the variables which are the root cause for the anomaly
+    find_root_cause(test_data, label_data)
+
+Error: 'value'
+Complete assignment code
+
+[27]
+11s
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Define function to read test and label files
+def read_data(test_file, label_file):
+    test_data = pd.read_csv(test_file)
+    label_data = pd.read_csv(label_file)
+    return test_data, label_data
+
+
+
+# Define function to perform EDA and find root cause
+def perform_eda(test_data):
+    # Perform exploratory data analysis here
+    # You can use methods like describe(), info(), plot(), etc.
+    # Analyze the data to find the root cause of anomalies
+    
+    # Example:
+    print(test_data.describe())
+    print(test_data.info())
+    test_data.plot()
+    plt.show()
+
+# Define function to find variables which are root cause for anomaly
+def find_root_cause(test_data, label_data):
+    # Analyze the data to find the variables which are root cause for anomaly
+    # You can use statistical tests, visualization, or machine learning models
+    
+    # Example:
+    correlation_matrix = test_data.corr()
+
+# Main function
+if __name__ == "__main__":
+    # Replace file paths with the actual file paths on your system
+    test_file = "test.csv"
+    label_file = "test_label.csv"
+    
+    # Read test and label files
+    test_data, label_data = read_data(test_file, label_file)
+    
+    
+    
+    # Perform EDA and find root cause
+    perform_eda(test_data)
+    
+    # Find out the variables which are the root cause for the anomaly
+    find_root_cause(test_data, label_data)
+
+
